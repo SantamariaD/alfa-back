@@ -30,11 +30,20 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (!$token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'No autorizado. Revisar datos ingresados.'], 401);
         }
 
-        return $this->respondWithToken($token);
+        $respuesta = [
+            'mensaje' => 'Correcto',
+            'codigo' => 200,
+            'payload' => [
+                'token' => $this->respondWithToken($token)->original['token'],
+                'usuario' => $this->me()->original,
+            ],
+        ];
+
+        return response()->json($respuesta);
     }
 
     /**
@@ -78,12 +87,8 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
-        $usuario = $this->me();
         return response()->json([
-            'access_token' => $token,
-            'usuario' => $usuario->original
-            //'token_type' => 'bearer',
-            //'expires_in' => auth()->factory()->getTTL() * 60
+            'token' => $token,
         ]);
     }
 
