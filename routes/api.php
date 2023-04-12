@@ -34,13 +34,14 @@ Route::group([
 Route::group([
     'prefix' => 'documentos'
 ], function ($router) {
-    Route::post('guardar-archivo', [DocumentosController::class, 'guardarArchivo']);
+    Route::post('guardar-documento', [DocumentosController::class, 'guardarArchivo']);
     Route::post('traer-archivo', [DocumentosController::class, 'traerArchivo']);
     Route::post('descargar-archivo', [DocumentosController::class, 'descargarArchivo']);
     Route::get('traer-documentos', [DocumentosController::class, 'traerTodosDocumentos']);
     Route::get('traer-documentos-area/{area}', [DocumentosController::class, 'traerDocumentosArea']);
     Route::post('actualizar-documento', [DocumentosController::class, 'actualizarDocumento']);
     Route::delete('borrar-documento', [DocumentosController::class, 'borrarDocumento']);
+    Route::delete('descargar-documento', [DocumentosController::class, 'descargarDocumento']);
 });
 
 Route::group([

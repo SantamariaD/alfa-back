@@ -27,7 +27,7 @@ class DocumentosController extends Controller
             return response()->json(Respuestas::respuesta400($validator->errors()));
         }
 
-        
+
         $datos_request = array_map('trim', $request->all());
 
         $archivo = $request->file('file0');
@@ -50,7 +50,9 @@ class DocumentosController extends Controller
             'documentos'
         );
 
-        return response()->json(Respuestas::respuesta200NoResultados('Archivo guardado.'));
+        $documentoRespuesta = Documento::where('uuid', $UUID)->get();
+
+        return response()->json(Respuestas::respuesta200('Archivo guardado.', $documentoRespuesta[0]));
     }
 
     public function traerArchivo(Request $request)
@@ -121,7 +123,7 @@ class DocumentosController extends Controller
         if (count($documentos) < 1) {
             return response()->json(Respuestas::respuesta400('El área no se encontro.'));
         }
-        
+
         return response()->json(
             Respuestas::respuesta200(
                 'Consulta exitosa.',
@@ -198,7 +200,9 @@ class DocumentosController extends Controller
         Documento::where('id', $request->input('id'))
             ->update($datosActualizado);
 
-        return response()->json(Respuestas::respuesta200NoResultados('Se actualizó el documento.'));
+        $documentoRespuesta = Documento::where('id', $request->input('id'))->get();
+
+        return response()->json(Respuestas::respuesta200('Se actualizó el documento.', $documentoRespuesta[0]));
     }
 
     public function borrarDocumento(Request $request)
@@ -222,5 +226,23 @@ class DocumentosController extends Controller
             ->update($datosActualizado);
 
         return response()->json(Respuestas::respuesta200NoResultados('Se borro correctamente el documento.'));
+    }
+
+    public function descargarDocumento(Request $request)
+    {
+        /**
+         *  Método para borrar un documento
+         */
+
+        $validator = Validator::make($request->all(), [
+            'uuid' => 'string|required',
+            'extension' => 'string|required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(Respuestas::respuesta400($validator->errors()));
+        }
+
+        return Storage::download('administracion/' + $request->uuid + '.' + $request->extension);
     }
 }
