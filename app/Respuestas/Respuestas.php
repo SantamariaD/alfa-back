@@ -30,7 +30,7 @@ class Respuestas
         ];
     }
 
-    public function respuesta401($error)
+    public static function respuesta401($error)
     {
         return $respuesta = [
             'codigo' => 401,
@@ -39,7 +39,7 @@ class Respuestas
         ];
     }
 
-    public function respuesta404($error)
+    public static function respuesta404($error)
     {
         return $respuesta = [
             'codigo' => 404,
