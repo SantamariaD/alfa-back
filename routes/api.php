@@ -41,7 +41,7 @@ Route::group([
     Route::get('traer-documentos-area/{area}', [DocumentosController::class, 'traerDocumentosArea']);
     Route::post('actualizar-documento', [DocumentosController::class, 'actualizarDocumento']);
     Route::delete('borrar-documento', [DocumentosController::class, 'borrarDocumento']);
-    Route::delete('descargar-documento', [DocumentosController::class, 'descargarDocumento']);
+    Route::get('descargar-documento/{uuid}/{extension}', [DocumentosController::class, 'descargarDocumento']);
 });
 
 Route::group([
@@ -50,4 +50,5 @@ Route::group([
     Route::post('confirmar-contrasena', [PerfilController::class, 'verificarContrasena']);
     Route::post('guardar-informacion', [PerfilController::class, 'guardarInformacionUsuario']);
     Route::post('actualizar-contrasena', [PerfilController::class, 'actualizarContrasena']);
+    Route::post('guardar-imagen', [PerfilController::class, 'guardarImagen']);
 });

@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Models\Perfil;
 
 class AuthController extends Controller
 {
@@ -34,12 +35,19 @@ class AuthController extends Controller
             return response()->json(['error' => 'No autorizado. Revisar datos ingresados.'], 401);
         }
 
+        $usuario = $this->me()->original;
+        $token = $this->respondWithToken($token)->original['token'];
+        $informacionUsuario = Perfil::where('id_usuario', $usuario->id)->get();
+        $usuario->informacio = $informacionUsuario[0];
+        $usuario->token = $token;
+        unset($usuario->password);
+
         $respuesta = [
             'mensaje' => 'Correcto',
             'codigo' => 200,
             'payload' => [
-                'token' => $this->respondWithToken($token)->original['token'],
-                'usuario' => $this->me()->original,
+                'token' => $token,
+                'usuario' => $usuario,
             ],
         ];
 

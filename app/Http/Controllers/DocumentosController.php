@@ -118,7 +118,7 @@ class DocumentosController extends Controller
             return response()->json(Respuestas::respuesta400('No se tiene el área a buscar.'));
         }
 
-        $documentos = Documento::where('area', $area)->get();
+        $documentos = Documento::where('area', $area)->where('activo', true)->get();
 
         if (count($documentos) < 1) {
             return response()->json(Respuestas::respuesta400('El área no se encontro.'));
@@ -147,6 +147,7 @@ class DocumentosController extends Controller
             'extension' => 'string|nullable',
             'area' => 'string|nullable',
             'areaNueva' => 'string|nullable',
+            'activo' => 'boolean|nullable',
         ]);
 
         $extensionNueva = '';
@@ -193,9 +194,16 @@ class DocumentosController extends Controller
             'uuid' => $this->UUID,
             'extension' => $extensionNueva,
             'area' => $request->areaNueva,
+            'activo' => $request->activo,
         ];
 
         $datosActualizado = array_filter($datosActualizado);
+
+        if ($request->has('activo')) {
+            $datosActualizado = [
+                'activo' => false,
+            ];
+        }
 
         Documento::where('id', $request->input('id'))
             ->update($datosActualizado);
@@ -228,21 +236,17 @@ class DocumentosController extends Controller
         return response()->json(Respuestas::respuesta200NoResultados('Se borro correctamente el documento.'));
     }
 
-    public function descargarDocumento(Request $request)
+    public function descargarDocumento($uuid, $extension)
     {
         /**
          *  Método para borrar un documento
          */
 
-        $validator = Validator::make($request->all(), [
-            'uuid' => 'string|required',
-            'extension' => 'string|required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(Respuestas::respuesta400($validator->errors()));
+        if (!$uuid) {
+            return response()->json(Respuestas::respuesta400('No se tiene uuid'));
         }
 
-        return Storage::download('administracion/' + $request->uuid + '.' + $request->extension);
+        $ruta = '/documentos/administracion/' . $uuid . '.' . $extension;
+        return Storage::download($ruta);
     }
 }

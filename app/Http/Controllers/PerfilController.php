@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Perfil;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class PerfilController extends Controller
 {
@@ -109,6 +111,7 @@ class PerfilController extends Controller
             'estado' =>  ['nullable', 'string'],
             'codigoPostal' =>  ['nullable', 'string'],
             'activo' =>  ['nullable', 'boolean'],
+            'imagen' =>  ['nullable', 'string'],
         ]);
 
         if ($validator->fails()) {
@@ -174,10 +177,50 @@ class PerfilController extends Controller
             $perfil->estado = $request->input('estado', $perfil->estado);
             $perfil->codigoPostal = $request->input('codigoPostal', $perfil->codigoPostal);
             $perfil->activo = $request->input('activo', $perfil->activo);
+            $perfil->imagen = $request->input('imagen', $perfil->imagen);
         }
 
         $perfil->save();
 
         return response()->json(Respuestas::respuesta200NoResultados('Información guardada.'));
+    }
+
+    public function guardarImagen(Request $request)
+    {
+        // Método para actualizar contraseña del usuario
+
+        $validator = Validator::make($request->all(), [
+            'file0' => 'required',
+            'id' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(Respuestas::respuesta400($validator->errors()));
+        }
+
+        $archivo = $request->file('file0');
+        $UUID = Str::orderedUuid();
+        $extension = $archivo->getClientOriginalExtension();
+        $request->merge(['imagen' => $UUID . '.' . $extension]);
+        $uuidViejo = Perfil::where('id_usuario', $request->id)->get()[0]->imagen;
+        
+        if ($uuidViejo)
+            Storage::delete('usuarios/' . $request->id . '/' . $uuidViejo);
+
+        $archivo->storeAs(
+            "/" . $request->id,
+            $UUID . '.' . $extension,
+            'usuarios'
+        );
+
+        $respuestaActualizar = $this->guardarInformacionUsuario($request)->original;
+
+        if ($respuestaActualizar['codigo'] != 200) {
+            return response()->json(
+                Respuestas::respuesta400('No se guardo imagen en la base de datos.')
+            );
+        }
+
+        return response()->json(Respuestas::respuesta200NoResultados('Archivo guardado.'));
     }
 }
