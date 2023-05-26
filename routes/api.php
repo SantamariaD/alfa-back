@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\ProductoController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -51,4 +53,14 @@ Route::group([
     Route::post('guardar-informacion', [PerfilController::class, 'guardarInformacionUsuario']);
     Route::post('actualizar-contrasena', [PerfilController::class, 'actualizarContrasena']);
     Route::post('guardar-imagen', [PerfilController::class, 'guardarImagen']);
+});
+
+Route::group([
+    'prefix' => 'producto'
+], function ($router) {
+    Route::post('guardar-producto', [ProductoController::class, 'crearProducto']);
+    Route::put('actualizar-producto', [ProductoController::class, 'actualizarProducto']);
+    Route::get('consultar-producto/{id}', [ProductoController::class, 'consultarProducto']);
+    Route::get('consultar-productos', [ProductoController::class, 'consultarProductos']);
+    Route::delete('eliminar-producto/{id}', [ProductoController::class, 'eliminarProducto']);
 });
