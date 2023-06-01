@@ -6,12 +6,17 @@ use App\Models\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Respuestas\Respuestas;
+use Illuminate\Support\Facades\DB;
 
 class ProductoController extends Controller
 {
     public function consultarProductos()
     {
-        $productos = Producto::all();
+        $productos = DB::table('productos')
+            ->join('categorias_productos', 'productos.categoria', '=', 'categorias_productos.id')
+            ->select('productos.*', 'categorias_productos.categoria', 'categorias_productos.id AS idCategoria')
+            ->get();
+
         return response()->json(Respuestas::respuesta200('Productos encontrados.', $productos));
     }
 
@@ -55,32 +60,48 @@ class ProductoController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id' => 'required',
-            'nombre' => 'required',
-            'descripcion' => 'required',
-            'codigo' => 'required',
-            'categoria' => 'required',
-            'proveedor' => 'required',
-            'precioCompra' => 'required',
-            'precioVenta' => 'required',
-            'cantidadStock' => 'required',
-            'fechaCompra' => 'required',
-            'imagen' => 'required',
-            'agotado' => 'boolean',
+            'nombre' => 'nullable',
+            'descripcion' => 'nullable',
+            'codigoBarras' => 'nullable',
+            'categoria' => 'nullable',
+            'proveedor' => 'nullable',
+            'precioCompra' => 'nullable',
+            'precioVenta' => 'nullable',
+            'cantidadStock' => 'nullable',
+            'fechaCompra' => 'nullable',
+            'imagen' => 'nullable',
+            'ventas' => 'nullable',
+            'agotado' => 'boolean|nullable',
+            'sku' => 'nullable',
         ]);
 
         if ($validator->fails()) {
             return response()->json(Respuestas::respuesta400($validator->errors()));
         }
 
-        $producto = Producto::find($request->id);
+        $datosActualizado = [
+            'id' => $request->id,
+            'nombre' => $request->nombre,
+            'categoria' => $request->categoria,
+            'descripcion' => $request->descripcion,
+            'codigoBarras' => $request->codigoBarras,
+            'proveedor' => $request->proveedor,
+            'precioCompra' => $request->precioCompra,
+            'precioVenta' => $request->precioVenta,
+            'cantidadStock' => $request->cantidadStock,
+            'fechaCompra' => $request->fechaCompra,
+            'imagen' => $request->imagen,
+            'sku' => $request->sku,
+            'ventas' => $request->ventas,
+            'agotado' => $request->agotado,
+        ];
 
-        if (!$producto) {
-            return response()->json(Respuestas::respuesta404('Producto no encontrado'));
-        }
+        $datosActualizado = array_filter($datosActualizado);
 
-        $producto->update($request->all());
+        Producto::where('id', $request->input('id'))
+            ->update($datosActualizado);
 
-        return response()->json(Respuestas::respuesta200('Producto actualizado.', $producto));
+        return response()->json(Respuestas::respuesta200NoResultados('Producto actualizado.'));
     }
 
     public function eliminarProducto($id)

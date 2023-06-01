@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\EmpleadoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,4 +65,20 @@ Route::group([
     Route::get('consultar-producto/{id}', [ProductoController::class, 'consultarProducto']);
     Route::get('consultar-productos', [ProductoController::class, 'consultarProductos']);
     Route::delete('eliminar-producto/{id}', [ProductoController::class, 'eliminarProducto']);
+});
+
+Route::group([
+    'prefix' => 'categorias'
+], function ($router) {
+    Route::get('consultar-categorias', [CategoriaController::class, 'consultarCategorias']);
+});
+
+Route::group([
+    'prefix' => 'empleados'
+], function ($router) {
+    Route::post('guardar-empleado', [EmpleadoController::class, 'crearEmpleado']);
+    Route::put('actualizar-empleado', [EmpleadoController::class, 'actualizarEmpleado']);
+    Route::delete('eliminar-empleado/{id}', [EmpleadoController::class, 'eliminarEmpleado']);
+    Route::get('consultar-empleado/{id}', [EmpleadoController::class, 'consultarEmpleado']);
+    Route::get('consultar-empleados', [EmpleadoController::class, 'consultarTodosEmpleados']);
 });
