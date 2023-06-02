@@ -71,6 +71,8 @@ Route::group([
     'prefix' => 'categorias'
 ], function ($router) {
     Route::get('consultar-categorias', [CategoriaController::class, 'consultarCategorias']);
+    Route::post('guardar-categoria', [CategoriaController::class, 'crearCategoria']);
+    Route::delete('eliminar-categoria/{id}', [CategoriaController::class, 'eliminarCategoria']);
 });
 
 Route::group([
