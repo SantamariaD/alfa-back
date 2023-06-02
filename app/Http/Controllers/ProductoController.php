@@ -25,15 +25,14 @@ class ProductoController extends Controller
         $validator = Validator::make($request->all(), [
             'nombre' => 'required',
             'descripcion' => 'required',
-            'codigo' => 'required',
+            'codigoBarras' => 'required',
             'categoria' => 'required',
             'proveedor' => 'required',
             'precioCompra' => 'required',
             'precioVenta' => 'required',
             'cantidadStock' => 'required',
             'fechaCompra' => 'required',
-            'imagen' => 'required',
-            'agotado' => 'required|boolean',
+            'sku' => 'required',
         ]);
 
         if ($validator->fails()) {
