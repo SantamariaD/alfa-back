@@ -20,6 +20,7 @@ class Producto extends Model
         'precioCompra',
         'precioVenta',
         'cantidadStock',
+        'ventas'.
         'fechaCompra',
         'imagen',
         'agotado',

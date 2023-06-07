@@ -8,6 +8,7 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\EmpleadoController;
+use App\Http\Controllers\ProveedorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,4 +84,14 @@ Route::group([
     Route::delete('eliminar-empleado/{id}', [EmpleadoController::class, 'eliminarEmpleado']);
     Route::get('consultar-empleado/{id}', [EmpleadoController::class, 'consultarEmpleado']);
     Route::get('consultar-empleados', [EmpleadoController::class, 'consultarTodosEmpleados']);
+});
+
+Route::group([
+    'prefix' => 'proveedores'
+], function ($router) {
+    Route::post('guardar-proveedor', [ProveedorController::class, 'crearProveedor']);
+    Route::put('actualizar-proveedor', [ProveedorController::class, 'actualizarProveedor']);
+    Route::delete('eliminar-proveedor/{id}', [ProveedorController::class, 'eliminarProveedor']);
+    Route::get('consultar-proveedor/{id}', [ProveedorController::class, 'consultarProveedor']);
+    Route::get('consultar-proveedores', [ProveedorController::class, 'consultarTodosProveedores']);
 });
