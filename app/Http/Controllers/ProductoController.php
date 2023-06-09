@@ -15,6 +15,7 @@ class ProductoController extends Controller
         $productos = DB::table('productos')
             ->join('categorias_productos', 'productos.categoria', '=', 'categorias_productos.id')
             ->select('productos.*', 'categorias_productos.categoria', 'categorias_productos.id AS idCategoria')
+            ->orderBy('productos.nombre', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Productos encontrados.', $productos));

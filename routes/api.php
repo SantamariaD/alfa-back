@@ -9,6 +9,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\CatalogoProveedorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -94,4 +95,14 @@ Route::group([
     Route::delete('eliminar-proveedor/{id}', [ProveedorController::class, 'eliminarProveedor']);
     Route::get('consultar-proveedor/{id}', [ProveedorController::class, 'consultarProveedor']);
     Route::get('consultar-proveedores', [ProveedorController::class, 'consultarTodosProveedores']);
+});
+
+Route::group([
+    'prefix' => 'catalogo-proveedores'
+], function ($router) {
+    Route::post('guardar-catalogo', [CatalogoProveedorController::class, 'crearProductoCatalogo']);
+    Route::put('actualizar-catalogo', [CatalogoProveedorController::class, 'actualizarProductoCatalogo']);
+    Route::delete('eliminar-catalogo/{id}', [CatalogoProveedorController::class, 'eliminarProductoCatalogo']);
+    Route::get('consultar-catalogo/{id}', [CatalogoProveedorController::class, 'consultarCatalogoProveedor']);
+    Route::get('consultar-catalogos', [CatalogoProveedorController::class, 'consultarCatalogos']);
 });

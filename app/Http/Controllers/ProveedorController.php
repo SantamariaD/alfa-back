@@ -15,8 +15,13 @@ class ProveedorController extends Controller
     public function consultarTodosProveedores()
     {
         $proveedores = DB::table('proveedores')->get();
+        $actualizacion = Proveedor::latest('updated_at')->first();
+        $respuesta = [
+            'proveedores' => $proveedores,
+            'utlimaActualizacion' => $actualizacion
+        ];
         
-        return response()->json(Respuestas::respuesta200('Proveedores encontrados.', $proveedores));
+        return response()->json(Respuestas::respuesta200('Proveedores encontrados.', $respuesta));
     }
 
     public function crearProveedor(Request $request)
