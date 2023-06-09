@@ -31,6 +31,8 @@ class Empleado extends Model
         'tipo_contrato',
         'fecha_alta',
         'fecha_baja',
+        'baja',
+        'fecha_reingreso'
     ];
 
     protected $dates = [
@@ -38,7 +40,8 @@ class Empleado extends Model
         'fecha_inicio',
         'fecha_alta',
         'fecha_baja',
-        'created_at',
+        "created_at",
+        'fecha_reingreso',
         'updated_at',
     ];
 }
