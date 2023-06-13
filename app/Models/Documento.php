@@ -14,7 +14,7 @@ class Documento extends Model
         'id_user',
         'nombre_archivo',
         'uuid',
-        'area',
+        'id_area',
         'extension',
         'activo'
     ];
@@ -22,6 +22,6 @@ class Documento extends Model
 
     public function getOrdenadosPorArea()
     {
-        return $this->orderBy('area')->get();
+        return $this->where('activo', 1)->orderBy('area')->get();
     }
 }

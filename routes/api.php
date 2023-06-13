@@ -10,6 +10,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\CatalogoProveedorController;
+use App\Http\Controllers\AreasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,7 +48,7 @@ Route::group([
     Route::get('traer-documentos-area/{area}', [DocumentosController::class, 'traerDocumentosArea']);
     Route::post('actualizar-documento', [DocumentosController::class, 'actualizarDocumento']);
     Route::delete('borrar-documento', [DocumentosController::class, 'borrarDocumento']);
-    Route::get('descargar-documento/{uuid}/{extension}', [DocumentosController::class, 'descargarDocumento']);
+    Route::get('descargar-documento/{area}/{uuid}/{extension}', [DocumentosController::class, 'descargarDocumento']);
 });
 
 Route::group([
@@ -113,4 +114,10 @@ Route::group([
     Route::delete('eliminar-catalogo/{id}', [CatalogoProveedorController::class, 'eliminarProductoCatalogo']);
     Route::get('consultar-catalogo/{id}', [CatalogoProveedorController::class, 'consultarCatalogoProveedor']);
     Route::get('consultar-catalogos', [CatalogoProveedorController::class, 'consultarCatalogos']);
+});
+
+Route::group([
+    'prefix' => 'areas'
+], function ($router) {
+    Route::get('consultar-areas', [AreasController::class, 'consultarAreas']);
 });
