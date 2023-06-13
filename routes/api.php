@@ -48,7 +48,7 @@ Route::group([
     Route::get('traer-documentos-area/{area}', [DocumentosController::class, 'traerDocumentosArea']);
     Route::post('actualizar-documento', [DocumentosController::class, 'actualizarDocumento']);
     Route::delete('borrar-documento', [DocumentosController::class, 'borrarDocumento']);
-    Route::get('descargar-documento/{uuid}/{extension}', [DocumentosController::class, 'descargarDocumento']);
+    Route::get('descargar-documento/{area}/{uuid}/{extension}', [DocumentosController::class, 'descargarDocumento']);
 });
 
 Route::group([

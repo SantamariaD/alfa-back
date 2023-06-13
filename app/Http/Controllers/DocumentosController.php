@@ -39,7 +39,7 @@ class DocumentosController extends Controller
         $documento = new Documento();
         $documento->id_user = $datos_request['id_user'];
         $documento->nombre_archivo = $datos_request['nombre_archivo'];
-        $documento->area = $datos_request['id_area'];
+        $documento->id_area = $datos_request['id_area'];
         $documento->uuid = $UUID;
         $documento->extension = $extension;
 
@@ -165,6 +165,7 @@ class DocumentosController extends Controller
             'id_area' => 'int|nullable',
             'area' => 'string|nullable',
             'areaNueva' => 'string|nullable',
+            'areaAnterior' => 'string|nullable',
             'activo' => 'boolean|nullable',
         ]);
 
@@ -196,10 +197,10 @@ class DocumentosController extends Controller
         } elseif ($request->has('areaNueva')) {
             // CASO 2: Se actualiza el area
             Storage::move(
-                'documentos/' . $request->area . '/' . $request->uuid . '.' .
-                $request->extension,
-                'documentos/' . $request->areaNueva . '/' .
-                $request->uuid . '.' . $request->extension
+                'documentos/' . $request->areaAnterior . '/' . $request->uuid . '.' .
+                    $request->extension,
+                'documentos/' . $request->area . '/' .
+                    $request->uuid . '.' . $request->extension
             );
         } else {
             // CASO 3: Se actualiza lo demás
@@ -211,7 +212,7 @@ class DocumentosController extends Controller
             'nombre_archivo' => $request->nombre_archivo,
             'uuid' => $this->UUID,
             'extension' => $extensionNueva,
-            'id_area' => $request->areaNueva,
+            'id_area' => $request->areaNueva | $request->id_area,
             'activo' => $request->activo,
         ];
 
@@ -254,17 +255,24 @@ class DocumentosController extends Controller
         return response()->json(Respuestas::respuesta200NoResultados('Se borro correctamente el documento.'));
     }
 
-    public function descargarDocumento($uuid, $extension)
+    public function descargarDocumento($area, $uuid, $extension)
     {
         /**
          *  Método para borrar un documento
          */
 
+        $documento = Documento::where('uuid', $uuid)->first();
+       
         if (!$uuid) {
             return response()->json(Respuestas::respuesta400('No se tiene uuid'));
         }
 
-        $ruta = '/documentos/administracion/' . $uuid . '.' . $extension;
-        return Storage::download($ruta);
+        $ruta = '/documentos/' . $area . '/' . $uuid . '.' . $extension;
+        return Storage::download(
+            $ruta,
+            $documento->nombre_archivo .
+                '.' .
+                $documento->extension
+        );
     }
 }
