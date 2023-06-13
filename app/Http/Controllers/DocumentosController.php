@@ -19,6 +19,7 @@ class DocumentosController extends Controller
         $validator = Validator::make($request->all(), [
             'id_user' => 'int|required',
             'file0' => 'required',
+            'id_area' => 'required',
             'area' => 'required',
             'nombre_archivo' => 'required'
         ]);
@@ -38,7 +39,7 @@ class DocumentosController extends Controller
         $documento = new Documento();
         $documento->id_user = $datos_request['id_user'];
         $documento->nombre_archivo = $datos_request['nombre_archivo'];
-        $documento->area = $datos_request['area'];
+        $documento->area = $datos_request['id_area'];
         $documento->uuid = $UUID;
         $documento->extension = $extension;
 
@@ -99,11 +100,27 @@ class DocumentosController extends Controller
         /**
          *  Método para consultaer todos los documentos ordenados alfabeticamente por área
          */
-        $documentos = new Documento;
+        $documentos = Documento::where('activo', 1)
+            ->join('areas', 'documentos.id_area', '=', 'areas.id')
+            ->select('documentos.*', 'areas.area')
+            ->orderBy('area')
+            ->get();
+
+        $actualizacion = Documento::latest('updated_at')
+            ->where('activo', 1)
+            ->join('users', 'documentos.id_user', '=', 'users.id')
+            ->select('documentos.*', 'users.name AS nombreUsuario')
+            ->first();
+
+        $respuesta = [
+            'documentos' => $documentos,
+            'ultimaActualizacion' => $actualizacion
+        ];
+
         return response()->json(
             Respuestas::respuesta200(
                 'Consulta exitosa.',
-                $documentos->getOrdenadosPorArea()
+                $respuesta
             )
         );
     }
@@ -145,6 +162,7 @@ class DocumentosController extends Controller
             'uuid' => 'string|nullable',
             'file0' => 'nullable',
             'extension' => 'string|nullable',
+            'id_area' => 'int|nullable',
             'area' => 'string|nullable',
             'areaNueva' => 'string|nullable',
             'activo' => 'boolean|nullable',
@@ -179,9 +197,9 @@ class DocumentosController extends Controller
             // CASO 2: Se actualiza el area
             Storage::move(
                 'documentos/' . $request->area . '/' . $request->uuid . '.' .
-                    $request->extension,
+                $request->extension,
                 'documentos/' . $request->areaNueva . '/' .
-                    $request->uuid . '.' . $request->extension
+                $request->uuid . '.' . $request->extension
             );
         } else {
             // CASO 3: Se actualiza lo demás
@@ -193,7 +211,7 @@ class DocumentosController extends Controller
             'nombre_archivo' => $request->nombre_archivo,
             'uuid' => $this->UUID,
             'extension' => $extensionNueva,
-            'area' => $request->areaNueva,
+            'id_area' => $request->areaNueva,
             'activo' => $request->activo,
         ];
 
