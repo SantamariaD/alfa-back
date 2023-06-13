@@ -35,13 +35,5 @@ class Empleado extends Model
         'fecha_reingreso'
     ];
 
-    protected $dates = [
-        'fecha_nacimiento',
-        'fecha_inicio',
-        'fecha_alta',
-        'fecha_baja',
-        "created_at",
-        'fecha_reingreso',
-        'updated_at',
-    ];
+   
 }
