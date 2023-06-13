@@ -18,26 +18,27 @@ class EmpleadoController extends Controller
     public function crearEmpleado(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nombres' => 'required',
-            'apellido_paterno' => 'required',
-            'apellido_materno' => 'required',
-            'fecha_nacimiento' => 'required',
-            'genero' => 'required',
-            'estado_civil' => 'required',
-            'curp' => 'required',
-            'rfc' => 'required',
-            'nss' => 'required',
-            'direccion' => 'required',
-            'telefono' => 'required',
-            'correo_electronico' => 'required',
-            'puesto' => 'required',
-            'departamento' => 'required',
-            'fecha_inicio' => 'required',
-            'salario' => 'required',
-            'horas_laborales' => 'required',
-            'tipo_contrato' => 'required',
-            'fecha_alta' => 'required',
+            'nombres' => 'nullable',
+            'apellido_paterno' => 'nullable',
+            'apellido_materno' => 'nullable',
+            'fecha_nacimiento' => 'nullable',
+            'genero' => 'nullable',
+            'estado_civil' => 'nullable',
+            'curp' => 'nullable',
+            'rfc' => 'nullable',
+            'nss' => 'nullable',
+            'direccion' => 'nullable',
+            'telefono' => 'nullable',
+            'correo_electronico' => 'nullable',
+            'puesto' => 'nullable',
+            'departamento' => 'nullable',
+            'fecha_inicio' => 'nullable',
+            'salario' => 'nullable',
+            'horas_laborales' => 'nullable',
+            'tipo_contrato' => 'nullable',
+            'fecha_alta' => 'nullable',
             'fecha_baja' => 'nullable',
+           
         ]);
 
         if ($validator->fails()) {
@@ -84,6 +85,8 @@ class EmpleadoController extends Controller
             'tipo_contrato' => 'nullable',
             'fecha_alta' => 'nullable',
             'fecha_baja' => 'nullable',
+            'baja' => 'nullable',
+            'fecha_reingreso' => 'nulleable'
         ]);
 
         if ($validator->fails()) {
@@ -112,6 +115,8 @@ class EmpleadoController extends Controller
             'tipo_contrato' => $request->tipo_contrato,
             'fecha_alta' => $request->fecha_alta,
             'fecha_baja' => $request->fecha_baja,
+            'baja' => $request->baja,
+            'fecha_reingreso' => $request->fecha_reingreso,
         ];
 
         $datosActualizados = array_filter($datosActualizados);
