@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Respuestas\Respuestas;
 use App\Models\Empleado;
 use App\Models\DocEmpleado;
+use Illuminate\Support\Str;
 
 class EmpleadoController extends Controller
 {
@@ -175,14 +176,13 @@ class EmpleadoController extends Controller
         $documento->area = $datos_request['area'];
         $documento->uuid = $UUID;
         $documento->extension = $extension;
-        $documento->estatus = $datos_request['estatus'];
 
         $documento->save();
 
         $archivo->storeAs(
             "/" . $area,
             $UUID . '.' . $extension,
-            'documentos_Empleado'
+            'empleados'
         );
 
         $documentoRespuesta = DocEmpleado::where('uuid', $UUID)->get();
