@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Respuestas\Respuestas;
 use App\Models\Empleado;
+use Illuminate\Support\Facades\Storage;
 use App\Models\DocEmpleado;
 use Illuminate\Support\Str;
 
@@ -283,7 +284,7 @@ class EmpleadoController extends Controller
             'area' => 'string|nullable',
             'areaNueva' => 'string|nullable',
             'activo' => 'boolean|nullable',
-            'estatus' => 'boolean|nullable'
+            'estatus' => 'string|nullable'
         ]);
 
         $extensionNueva = '';
@@ -335,6 +336,7 @@ class EmpleadoController extends Controller
         ];
 
         $datosActualizado = array_filter($datosActualizado);
+       
 
         if ($request->has('activo')) {
             $datosActualizado = [
@@ -373,7 +375,7 @@ class EmpleadoController extends Controller
         return response()->json(Respuestas::respuesta200NoResultados('Se borro correctamente el documento.'));
     }
 
-    public function descargarDocumento($uuid, $extension)
+    public function descargarDocumento($uuid,$extension,$area,$nombre_archivo)
     {
         /**
          *  Método para borrar un documento
@@ -383,7 +385,12 @@ class EmpleadoController extends Controller
             return response()->json(Respuestas::respuesta400('No se tiene uuid'));
         }
 
-        $ruta = '/empleados/administracion/' . $uuid . '.' . $extension;
-        return Storage::download($ruta);
+        $ruta = '/empleados/' . $area . '/' . $uuid . '.' . $extension;
+        return Storage::download(
+            $ruta,
+            $nombre_archivo .
+                '.' .
+                $extension
+        );
     }
 }
