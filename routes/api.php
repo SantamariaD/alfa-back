@@ -89,6 +89,14 @@ Route::group([
     Route::delete('eliminar-empleado/{id}', [EmpleadoController::class, 'eliminarEmpleado']);
     Route::get('consultar-empleado/{id}', [EmpleadoController::class, 'consultarEmpleado']);
     Route::get('consultar-empleados', [EmpleadoController::class, 'consultarTodosEmpleados']);
+    Route::post('guardar-documento', [EmpleadoController::class, 'guardarArchivo']);
+    Route::post('traer-archivo', [EmpleadoController::class, 'traerArchivo']);
+    Route::post('descargar-archivo', [EmpleadoController::class, 'descargarArchivo']);
+    Route::get('traer-documentos', [EmpleadoController::class, 'traerTodosDocumentos']);
+    Route::get('traer-documentos-area/{area}', [EmpleadoController::class, 'traerDocumentosArea']);
+    Route::post('actualizar-documento', [EmpleadoController::class, 'actualizarDocumento']);
+    Route::delete('borrar-documento', [EmpleadoController::class, 'borrarDocumento']);
+    Route::get('descargar-documento/{uuid}/{extension}/{area}/{nombre_archivo}', [EmpleadoController::class, 'descargarDocumento']);
 });
 
 Route::group([
