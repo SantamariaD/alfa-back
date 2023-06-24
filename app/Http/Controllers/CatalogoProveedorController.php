@@ -68,6 +68,7 @@ class CatalogoProveedorController extends Controller
             ->join('proveedores', 'proveedores.id', '=', 'catalogo_proveedores.idProveedor')
             ->select(
                 'catalogo_proveedores.*',
+                'productos.sku',
                 'productos.nombre AS nombreProducto',
                 'productos.imagen',
                 'proveedores.nombre AS nombreProveedor'

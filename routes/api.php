@@ -11,6 +11,9 @@ use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\CatalogoProveedorController;
 use App\Http\Controllers\AreasController;
+use App\Http\Controllers\OrdenCompraController;
+use App\Http\Controllers\ProductoOrdenCompraController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -112,4 +115,17 @@ Route::group([
     'prefix' => 'areas'
 ], function ($router) {
     Route::get('consultar-areas', [AreasController::class, 'consultarAreas']);
+});
+
+Route::group([
+    'prefix' => 'ordenes-compra'
+], function ($router) {
+    Route::post('guardar-orden-compra', [OrdenCompraController::class, 'crearOrdenCompra']);
+    Route::get('consultar-orden-compra', [OrdenCompraController::class, 'consultarOrdenesCompra']);
+});
+
+Route::group([
+    'prefix' => 'productos-ordenes-compra'
+], function ($router) {
+    Route::post('guardar-producto-orden-compra', [ProductoOrdenCompraController::class, 'crearProductoOrdenCompra']);
 });
