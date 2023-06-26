@@ -16,11 +16,11 @@ class OrdenCompraController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'idProveedor' => 'required',
-            'representanteVendedor' => 'required',
+            'representanteVendedor' => 'nullable',
             'telefonoVendedor' => 'required',
             'correoVendedor' => 'required',
             'direccionVendedor' => 'required',
-            'representanteComprador' => 'required',
+            'representanteComprador' => 'nullable',
             'telefonoComprador' => 'required',
             'correoComprador' => 'required',
             'direccionComprador' => 'required',

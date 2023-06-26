@@ -16,5 +16,6 @@ class Proveedor extends Model
         'correo',
         'domicilio',
         'sitioWeb',
+        'representante'
     ];
 }

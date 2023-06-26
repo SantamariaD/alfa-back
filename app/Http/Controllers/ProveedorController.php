@@ -20,7 +20,7 @@ class ProveedorController extends Controller
             'proveedores' => $proveedores,
             'utlimaActualizacion' => $actualizacion
         ];
-        
+
         return response()->json(Respuestas::respuesta200('Proveedores encontrados.', $respuesta));
     }
 
@@ -31,11 +31,16 @@ class ProveedorController extends Controller
             'telefono' => 'required',
             'correo' => 'required',
             'domicilio' => 'required',
-            'sitioWeb' => 'required',
+            'representante' => 'required',
+            'sitioWeb' => 'nullable',
         ]);
 
         if ($validator->fails()) {
             return response()->json(Respuestas::respuesta400($validator->errors()));
+        }
+
+        if ($request->sitioWeb == null) {
+            $request->merge(['sitioWeb' => 'Sin sitio web']);
         }
 
         $proveedor = Proveedor::create($request->all());
@@ -63,6 +68,7 @@ class ProveedorController extends Controller
             'correo' => 'nullable',
             'domicilio' => 'nullable',
             'sitioWeb' => 'nullable',
+            'representante' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -75,7 +81,8 @@ class ProveedorController extends Controller
             'telefono' => $request->telefono,
             'correo' => $request->correo,
             'domicilio' => $request->domicilio,
-            'sitioWeb' => $request->sitioWeb
+            'sitioWeb' => $request->sitioWeb,
+            'representante' => $request->representante,
         ];
 
         $datosActualizado = array_filter($datosActualizado);
