@@ -49,12 +49,13 @@ class OrdenCompraController extends Controller
                 ->on('catalogo_proveedores.idProducto', '=', 'productos_orden_compra.idProducto');
         })
             ->join('productos', 'productos.id', '=', 'productos_orden_compra.idProducto')
+            ->join('orden_compra_info', 'orden_compra_info.id', '=', 'productos_orden_compra.idOrdenCompra')
             ->select('productos_orden_compra.*', 'catalogo_proveedores.politicasVenta', 'productos.sku', 'productos.nombre AS nombreProducto')
             ->get();
 
         $ordenesCompraInfo = $ordenesCompraInfo->map(function ($ordenCompra) use ($catalogoProveedor) {
             $catalogoProveedor =  $catalogoProveedor->map(function ($catalogo) use ($ordenCompra) {
-                if ($ordenCompra->idProveedor == $catalogo->idProveedor) {
+                if ($ordenCompra->idProveedor == $catalogo->idProveedor && $catalogo->idOrdenCompra == $ordenCompra->id) {
                     return $catalogo;
                 }
             });

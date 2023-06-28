@@ -16,12 +16,10 @@ class Producto extends Model
         'codigoBarras',
         'sku',
         'categoria',
-        'proveedor',
-        'precioCompra',
         'precioVenta',
+        'fechaCompra',
         'cantidadStock',
         'ventas'.
-        'fechaCompra',
         'imagen',
         'agotado',
     ];

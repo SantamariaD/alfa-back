@@ -28,8 +28,6 @@ class ProductoController extends Controller
             'descripcion' => 'required',
             'codigoBarras' => 'required',
             'categoria' => 'required',
-            'proveedor' => 'required',
-            'precioCompra' => 'required',
             'precioVenta' => 'required',
             'cantidadStock' => 'required',
             'fechaCompra' => 'required',
@@ -37,10 +35,15 @@ class ProductoController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(Respuestas::respuesta400($validator->errors()));
+            return response()->json(Respuestas::respuesta400($validator->errors()), 400);
         }
 
-        $producto = Producto::create($request->all());
+        Producto::create($request->all());
+        $producto = DB::table('productos')
+            ->join('categorias_productos', 'productos.categoria', '=', 'categorias_productos.id')
+            ->select('productos.*', 'categorias_productos.categoria', 'categorias_productos.id AS idCategoria')
+            ->orderBy('productos.nombre', 'asc')
+            ->get();
 
         return response()->json(Respuestas::respuesta200('Producto creado.', $producto), 201);
     }
@@ -64,8 +67,6 @@ class ProductoController extends Controller
             'descripcion' => 'nullable',
             'codigoBarras' => 'nullable',
             'categoria' => 'nullable',
-            'proveedor' => 'nullable',
-            'precioCompra' => 'nullable',
             'precioVenta' => 'nullable',
             'cantidadStock' => 'nullable',
             'fechaCompra' => 'nullable',
@@ -85,8 +86,6 @@ class ProductoController extends Controller
             'categoria' => $request->categoria,
             'descripcion' => $request->descripcion,
             'codigoBarras' => $request->codigoBarras,
-            'proveedor' => $request->proveedor,
-            'precioCompra' => $request->precioCompra,
             'precioVenta' => $request->precioVenta,
             'cantidadStock' => $request->cantidadStock,
             'fechaCompra' => $request->fechaCompra,
@@ -101,7 +100,13 @@ class ProductoController extends Controller
         Producto::where('id', $request->input('id'))
             ->update($datosActualizado);
 
-        return response()->json(Respuestas::respuesta200NoResultados('Producto actualizado.'));
+        $productos = DB::table('productos')
+            ->join('categorias_productos', 'productos.categoria', '=', 'categorias_productos.id')
+            ->select('productos.*', 'categorias_productos.categoria', 'categorias_productos.id AS idCategoria')
+            ->orderBy('productos.nombre', 'asc')
+            ->get();
+
+        return response()->json(Respuestas::respuesta200('Producto actualizado.', $productos));
     }
 
     public function eliminarProducto($id)
@@ -114,6 +119,12 @@ class ProductoController extends Controller
 
         $producto->delete();
 
-        return response()->json(Respuestas::respuesta200NoResultados('Producto eliminado'));
+        $productos = DB::table('productos')
+            ->join('categorias_productos', 'productos.categoria', '=', 'categorias_productos.id')
+            ->select('productos.*', 'categorias_productos.categoria', 'categorias_productos.id AS idCategoria')
+            ->orderBy('productos.nombre', 'asc')
+            ->get();
+
+        return response()->json(Respuestas::respuesta200('Producto eliminado', $productos));
     }
 }
