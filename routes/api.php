@@ -141,5 +141,7 @@ Route::group([
 Route::group([
     'prefix' => 'calendario'
 ], function ($router) {
-    Route::get('consultar-calendario-usuario', [CalendarioController::class, 'consultarCalendarioUsuario']);
+    Route::get('consultar-calendario-usuario/{ano}/{idUsuario}', [CalendarioController::class, 'consultarCalendarioUsuario']);
+    Route::delete('eliminar-evento-calendario/{id}', [CalendarioController::class, 'eliminarEventoCalendarioUsuario']);
+    Route::post('crear-evento-calendario', [CalendarioController::class, 'crearEventoCalendario']);
 });
