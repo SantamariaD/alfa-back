@@ -13,6 +13,7 @@ use App\Http\Controllers\CatalogoProveedorController;
 use App\Http\Controllers\AreasController;
 use App\Http\Controllers\OrdenCompraController;
 use App\Http\Controllers\ProductoOrdenCompraController;
+use App\Http\Controllers\CalendarioController;
 
 
 /*
@@ -136,4 +137,9 @@ Route::group([
     'prefix' => 'productos-ordenes-compra'
 ], function ($router) {
     Route::post('guardar-producto-orden-compra', [ProductoOrdenCompraController::class, 'crearProductoOrdenCompra']);
+});
+Route::group([
+    'prefix' => 'calendario'
+], function ($router) {
+    Route::get('consultar-calendario-usuario', [CalendarioController::class, 'consultarCalendarioUsuario']);
 });
