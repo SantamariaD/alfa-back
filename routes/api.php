@@ -14,6 +14,7 @@ use App\Http\Controllers\AreasController;
 use App\Http\Controllers\OrdenCompraController;
 use App\Http\Controllers\ProductoOrdenCompraController;
 use App\Http\Controllers\CalendarioController;
+use App\Http\Controllers\SucursalesController;
 
 
 /*
@@ -138,6 +139,7 @@ Route::group([
 ], function ($router) {
     Route::post('guardar-producto-orden-compra', [ProductoOrdenCompraController::class, 'crearProductoOrdenCompra']);
 });
+
 Route::group([
     'prefix' => 'calendario'
 ], function ($router) {
@@ -145,3 +147,14 @@ Route::group([
     Route::delete('eliminar-evento-calendario/{id}', [CalendarioController::class, 'eliminarEventoCalendarioUsuario']);
     Route::post('crear-evento-calendario', [CalendarioController::class, 'crearEventoCalendario']);
 });
+
+Route::group([
+    'prefix' => 'sucursales'
+], function ($router) {
+    Route::get('consultar-sucursales', [SucursalesController::class, 'consultarSucursales']);
+    Route::delete('eliminar-sucursal/{id}', [SucursalesController::class, 'eliminarSucursal']);
+    Route::post('crear-sucursal', [SucursalesController::class, 'crearSucursal']);
+    Route::put('actualizar-sucursal', [SucursalesController::class, 'actualizarSucursal']);
+});
+
+
