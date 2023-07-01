@@ -16,7 +16,10 @@ class EmpleadoController extends Controller
 
     public function consultarTodosEmpleados()
     {
-        $empleados = Empleado::all();
+        $empleados = Empleado::orderBy('apellido_paterno')
+            ->orderBy('apellido_materno')
+            ->orderBy('nombres')
+            ->get();
         return response()->json(Respuestas::respuesta200('Empleados encontrados.', $empleados));
     }
 
@@ -43,7 +46,7 @@ class EmpleadoController extends Controller
             'tipo_contrato' => 'nullable',
             'fecha_alta' => 'nullable',
             'fecha_baja' => 'nullable',
-           
+
         ]);
 
         if ($validator->fails()) {
@@ -125,7 +128,7 @@ class EmpleadoController extends Controller
         ];
 
         $datosActualizados = array_filter($datosActualizados);
-        if( $request->baja == 0){
+        if ($request->baja == 0) {
             $datosActualizados['baja'] = 0;
         }
 
@@ -336,7 +339,7 @@ class EmpleadoController extends Controller
         ];
 
         $datosActualizado = array_filter($datosActualizado);
-       
+
 
         if ($request->has('activo')) {
             $datosActualizado = [
@@ -375,7 +378,7 @@ class EmpleadoController extends Controller
         return response()->json(Respuestas::respuesta200NoResultados('Se borro correctamente el documento.'));
     }
 
-    public function descargarDocumento($uuid,$extension,$area,$nombre_archivo)
+    public function descargarDocumento($uuid, $extension, $area, $nombre_archivo)
     {
         /**
          *  Método para borrar un documento

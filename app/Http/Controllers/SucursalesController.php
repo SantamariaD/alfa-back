@@ -47,6 +47,7 @@ class SucursalesController extends Controller
         $validator = Validator::make($request->all(), [
             'id' => 'required',
             'nombreSucursal' => 'nullable',
+            'idEncargado' => 'nullable',
             'telefono' => 'nullable',
             'correo' => 'nullable',
             'horarioAtencion' => 'nullable',
@@ -64,6 +65,7 @@ class SucursalesController extends Controller
             'correo' => $request->correo,
             'horarioAtencion' => $request->horarioAtencion,
             'domicilio' => $request->domicilio,
+            'idEncargado' => $request->idEncargado,
         ];
 
         $datosActualizado = array_filter($datosActualizado);
