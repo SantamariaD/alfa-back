@@ -12,10 +12,10 @@ class ProductoController extends Controller
 {
     public function consultarProductos()
     {
-        $productos = DB::table('productos')
-            ->join('categorias_productos', 'productos.categoria', '=', 'categorias_productos.id')
-            ->select('productos.*', 'categorias_productos.categoria', 'categorias_productos.id AS idCategoria')
-            ->orderBy('productos.nombre', 'asc')
+        $productos = DB::table('stock_compras')
+            ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
+            ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
+            ->orderBy('stock_compras.nombre', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Productos encontrados.', $productos));
@@ -28,9 +28,8 @@ class ProductoController extends Controller
             'descripcion' => 'required',
             'codigoBarras' => 'required',
             'categoria' => 'required',
-            'precioVenta' => 'required',
             'cantidadStock' => 'required',
-            'fechaCompra' => 'required',
+            'ventas' => 'required',
             'sku' => 'required',
         ]);
 
@@ -39,10 +38,10 @@ class ProductoController extends Controller
         }
 
         Producto::create($request->all());
-        $producto = DB::table('productos')
-            ->join('categorias_productos', 'productos.categoria', '=', 'categorias_productos.id')
-            ->select('productos.*', 'categorias_productos.categoria', 'categorias_productos.id AS idCategoria')
-            ->orderBy('productos.nombre', 'asc')
+        $producto = DB::table('stock_compras')
+            ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
+            ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
+            ->orderBy('stock_compras.nombre', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Producto creado.', $producto), 201);
@@ -67,10 +66,7 @@ class ProductoController extends Controller
             'descripcion' => 'nullable',
             'codigoBarras' => 'nullable',
             'categoria' => 'nullable',
-            'precioVenta' => 'nullable',
             'cantidadStock' => 'nullable',
-            'fechaCompra' => 'nullable',
-            'imagen' => 'nullable',
             'ventas' => 'nullable',
             'agotado' => 'boolean|nullable',
             'sku' => 'nullable',
@@ -86,12 +82,9 @@ class ProductoController extends Controller
             'categoria' => $request->categoria,
             'descripcion' => $request->descripcion,
             'codigoBarras' => $request->codigoBarras,
-            'precioVenta' => $request->precioVenta,
             'cantidadStock' => $request->cantidadStock,
-            'fechaCompra' => $request->fechaCompra,
-            'imagen' => $request->imagen,
-            'sku' => $request->sku,
             'ventas' => $request->ventas,
+            'sku' => $request->sku,
             'agotado' => $request->agotado,
         ];
 
@@ -100,10 +93,10 @@ class ProductoController extends Controller
         Producto::where('id', $request->input('id'))
             ->update($datosActualizado);
 
-        $productos = DB::table('productos')
-            ->join('categorias_productos', 'productos.categoria', '=', 'categorias_productos.id')
-            ->select('productos.*', 'categorias_productos.categoria', 'categorias_productos.id AS idCategoria')
-            ->orderBy('productos.nombre', 'asc')
+        $productos = DB::table('stock_compras')
+            ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
+            ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
+            ->orderBy('stock_compras.nombre', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Producto actualizado.', $productos));
@@ -119,10 +112,10 @@ class ProductoController extends Controller
 
         $producto->delete();
 
-        $productos = DB::table('productos')
-            ->join('categorias_productos', 'productos.categoria', '=', 'categorias_productos.id')
-            ->select('productos.*', 'categorias_productos.categoria', 'categorias_productos.id AS idCategoria')
-            ->orderBy('productos.nombre', 'asc')
+        $productos = DB::table('stock_compras')
+            ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
+            ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
+            ->orderBy('stock_compras.nombre', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Producto eliminado', $productos));

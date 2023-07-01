@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     use HasFactory;
-    protected $table = 'productos';
+    protected $table = 'stock_compras';
 
     protected $fillable = [
         'nombre',
@@ -16,11 +16,8 @@ class Producto extends Model
         'codigoBarras',
         'sku',
         'categoria',
-        'precioVenta',
-        'fechaCompra',
+        'compradosTotales',
         'cantidadStock',
-        'ventas'.
-        'imagen',
         'agotado',
     ];
 }
