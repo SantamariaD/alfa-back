@@ -29,7 +29,6 @@ class ProductoController extends Controller
             'codigoBarras' => 'required',
             'categoria' => 'required',
             'cantidadStock' => 'required',
-            'ventas' => 'required',
             'sku' => 'required',
         ]);
 
@@ -67,7 +66,7 @@ class ProductoController extends Controller
             'codigoBarras' => 'nullable',
             'categoria' => 'nullable',
             'cantidadStock' => 'nullable',
-            'ventas' => 'nullable',
+            'comprasTotales' => 'nullable',
             'agotado' => 'boolean|nullable',
             'sku' => 'nullable',
         ]);
@@ -89,6 +88,10 @@ class ProductoController extends Controller
         ];
 
         $datosActualizado = array_filter($datosActualizado);
+
+        if ($request->agotado != 1) {
+            $datosActualizado['agotado'] = 0;
+        }
 
         Producto::where('id', $request->input('id'))
             ->update($datosActualizado);

@@ -7,6 +7,7 @@ use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\CategoriaVentaController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\CatalogoProveedorController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\OrdenCompraController;
 use App\Http\Controllers\ProductoOrdenCompraController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\SucursalesController;
+use App\Http\Controllers\StockVentaController;
 
 
 /*
@@ -81,6 +83,14 @@ Route::group([
     Route::get('consultar-categorias', [CategoriaController::class, 'consultarCategorias']);
     Route::post('guardar-categoria', [CategoriaController::class, 'crearCategoria']);
     Route::delete('eliminar-categoria/{id}', [CategoriaController::class, 'eliminarCategoria']);
+});
+
+Route::group([
+    'prefix' => 'categorias-ventas'
+], function ($router) {
+    Route::get('consultar-categorias', [CategoriaVentaController::class, 'consultarCategoriasVentas']);
+    Route::post('guardar-categoria', [CategoriaVentaController::class, 'crearCategoriaVentas']);
+    Route::delete('eliminar-categoria/{id}', [CategoriaVentaController::class, 'eliminarCategoriaVentas']);
 });
 
 Route::group([
@@ -155,6 +165,15 @@ Route::group([
     Route::delete('eliminar-sucursal/{id}', [SucursalesController::class, 'eliminarSucursal']);
     Route::post('crear-sucursal', [SucursalesController::class, 'crearSucursal']);
     Route::put('actualizar-sucursal', [SucursalesController::class, 'actualizarSucursal']);
+});
+
+Route::group([
+    'prefix' => 'stock-ventas'
+], function ($router) {
+    Route::get('consultar-productos', [StockVentaController::class, 'consultarProductosVentas']);
+    Route::post('guardar-producto', [StockVentaController::class, 'crearProductoVentas']);
+    Route::put('actualizar-producto', [StockVentaController::class, 'actualizarProductoVentas']);
+    Route::delete('eliminar-producto/{id}', [StockVentaController::class, 'eliminarProductoVentas']);
 });
 
 
