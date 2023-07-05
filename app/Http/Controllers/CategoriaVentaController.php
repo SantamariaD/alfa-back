@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Respuestas\Respuestas;
 use App\Models\CategoriaVenta;
 use App\Models\StockVenta;
+use App\Respuestas\Respuestas;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class CategoriaVentaController extends Controller
@@ -26,23 +26,41 @@ class CategoriaVentaController extends Controller
             return response()->json(Respuestas::respuesta400($validator->errors()), 400);
         }
 
-        $categoria = CategoriaVenta::create($request->all());
+        CategoriaVenta::create($request->all());
 
-        return response()->json(Respuestas::respuesta200('Categoria creado.', $categoria), 201);
+        $categorias = CategoriaVenta::all();
+
+        return response()->json(Respuestas::respuesta200('Categoria creado.', $categorias), 201);
     }
 
     public function eliminarCategoriaVentas($id)
     {
         $categoria = CategoriaVenta::find($id);
 
-        StockVenta::where('idCategoria', $id)->update(['categoria' => 1]);
+        StockVenta::where('idCategoria', $id)->update(['idCategoria' => 1]);
 
         if (!$categoria) {
-            return response()->json(Respuestas::respuesta404('Categoria no encontrado'), 404);
+            return response()->json(Respuestas::respuesta404('Producto no encontrado'), 404);
         }
 
         $categoria->delete();
+        $categorias = CategoriaVenta::all();
+        $productos = StockVenta::where('eliminado', false)
+            ->join(
+                'categorias_stock_ventas',
+                'stock_ventas.idCategoria',
+                '=',
+                'categorias_stock_ventas.id'
+            )
+            ->select('stock_ventas.*', 'categorias_stock_ventas.categoria')
+            ->orderBy('stock_ventas.nombreProducto', 'asc')
+            ->get();
 
-        return response()->json(Respuestas::respuesta200NoResultados('Categoria eliminado'));
+        $respuesta = [
+            'categorias' => $categorias,
+            'productos' => $productos,
+        ];
+
+        return response()->json(Respuestas::respuesta200('Categoria eliminado', $respuesta));
     }
 }

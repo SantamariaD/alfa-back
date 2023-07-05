@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\StockVenta;
 use App\Respuestas\Respuestas;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class StockVentaController extends Controller
 {
     public function consultarProductosVentas()
     {
-        $productos = StockVenta::join(
-            'categorias_stock_ventas',
-            'stock_ventas.idCategoria',
-            '=',
-            'categorias_stock_ventas.id'
-        )
+        $productos = StockVenta::where('eliminado', false)
+            ->join(
+                'categorias_stock_ventas',
+                'stock_ventas.idCategoria',
+                '=',
+                'categorias_stock_ventas.id'
+            )
             ->select('stock_ventas.*', 'categorias_stock_ventas.categoria')
             ->orderBy('stock_ventas.nombreProducto', 'asc')
             ->get();
@@ -27,11 +28,11 @@ class StockVentaController extends Controller
     public function crearProductoVentas(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nombre' => 'required',
+            'nombreProducto' => 'required',
             'descripcion' => 'required',
             'codigoBarras' => 'required',
             'precioVenta' => 'required',
-            'categoria' => 'required',
+            'idCategoria' => 'required',
             'sku' => 'required',
         ]);
 
@@ -40,12 +41,13 @@ class StockVentaController extends Controller
         }
 
         StockVenta::create($request->all());
-        $producto = StockVenta::join(
-            'categorias_stock_ventas',
-            'stock_ventas.idCategoria',
-            '=',
-            'categorias_stock_ventas.id'
-        )
+        $producto = StockVenta::where('eliminado', false)
+            ->join(
+                'categorias_stock_ventas',
+                'stock_ventas.idCategoria',
+                '=',
+                'categorias_stock_ventas.id'
+            )
             ->select('stock_ventas.*', 'categorias_stock_ventas.categoria')
             ->orderBy('stock_ventas.nombreProducto', 'asc')
             ->get();
@@ -94,12 +96,13 @@ class StockVentaController extends Controller
         StockVenta::where('id', $request->input('id'))
             ->update($datosActualizado);
 
-        $productos = StockVenta::join(
-            'categorias_stock_ventas',
-            'stock_ventas.idCategoria',
-            '=',
-            'categorias_stock_ventas.id'
-        )
+        $productos = StockVenta::where('eliminado', false)
+            ->join(
+                'categorias_stock_ventas',
+                'stock_ventas.idCategoria',
+                '=',
+                'categorias_stock_ventas.id'
+            )
             ->select('stock_ventas.*', 'categorias_stock_ventas.categoria')
             ->orderBy('stock_ventas.nombreProducto', 'asc')
             ->get();
@@ -109,20 +112,19 @@ class StockVentaController extends Controller
 
     public function eliminarProductoVentas($id)
     {
-        $producto = StockVenta::find($id);
-
-        if (!$producto) {
-            return response()->json(Respuestas::respuesta404('Producto no encontrado'));
+        if (!$id) {
+            return response()->json(Respuestas::respuesta404('id de producto no enviado.'));
         }
 
-        $producto->delete();
+        StockVenta::where('id', $id)->update(['eliminado' => true]);
 
-        $productos = StockVenta::join(
-            'categorias_stock_ventas',
-            'stock_ventas.idCategoria',
-            '=',
-            'categorias_stock_ventas.id'
-        )
+        $productos = StockVenta::where('eliminado', false)
+            ->join(
+                'categorias_stock_ventas',
+                'stock_ventas.idCategoria',
+                '=',
+                'categorias_stock_ventas.id'
+            )
             ->select('stock_ventas.*', 'categorias_stock_ventas.categoria')
             ->orderBy('stock_ventas.nombreProducto', 'asc')
             ->get();

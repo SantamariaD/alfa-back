@@ -20,5 +20,6 @@ class StockVenta extends Model
         'cantidadStock',
         'agotado',
         'precioVenta',
+        'eliminado',
     ];
 }

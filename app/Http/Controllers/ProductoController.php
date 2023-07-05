@@ -12,7 +12,7 @@ class ProductoController extends Controller
 {
     public function consultarProductos()
     {
-        $productos = DB::table('stock_compras')
+        $productos = Producto::where('eliminado', false)
             ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
             ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
             ->orderBy('stock_compras.nombre', 'asc')
@@ -37,7 +37,7 @@ class ProductoController extends Controller
         }
 
         Producto::create($request->all());
-        $producto = DB::table('stock_compras')
+        $producto = Producto::where('eliminado', false)
             ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
             ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
             ->orderBy('stock_compras.nombre', 'asc')
@@ -69,6 +69,7 @@ class ProductoController extends Controller
             'comprasTotales' => 'nullable',
             'agotado' => 'boolean|nullable',
             'sku' => 'nullable',
+            'eliminado' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -85,6 +86,7 @@ class ProductoController extends Controller
             'ventas' => $request->ventas,
             'sku' => $request->sku,
             'agotado' => $request->agotado,
+            'eliminado' => $request->eliminado,
         ];
 
         $datosActualizado = array_filter($datosActualizado);
@@ -96,7 +98,7 @@ class ProductoController extends Controller
         Producto::where('id', $request->input('id'))
             ->update($datosActualizado);
 
-        $productos = DB::table('stock_compras')
+        $productos = Producto::where('eliminado', false)
             ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
             ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
             ->orderBy('stock_compras.nombre', 'asc')
@@ -107,15 +109,13 @@ class ProductoController extends Controller
 
     public function eliminarProducto($id)
     {
-        $producto = Producto::find($id);
-
-        if (!$producto) {
-            return response()->json(Respuestas::respuesta404('Producto no encontrado'));
+        if (!$id) {
+            return response()->json(Respuestas::respuesta404('id de producto no enviado.'));
         }
 
-        $producto->delete();
+        Producto::where('id', $id)->update(['eliminado' => true]);
 
-        $productos = DB::table('stock_compras')
+        $productos = Producto::where('eliminado', false)
             ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
             ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
             ->orderBy('stock_compras.nombre', 'asc')

@@ -72,6 +72,7 @@ class CatalogoProveedorController extends Controller
                 'stock_compras.nombre AS nombreProducto',
                 'proveedores.nombre AS nombreProveedor'
             )
+            ->where('stock_compras.eliminado', false)
             ->orderBy('nombreProducto', 'asc')
             ->get();
 
@@ -91,10 +92,8 @@ class CatalogoProveedorController extends Controller
 
     public function eliminarProductoCatalogo($id)
     {
-        $producto = CatalogoProveedor::find($id);
-
-        if (!$producto) {
-            return response()->json(Respuestas::respuesta404('Producto no encontrado'));
+        if (!$id) {
+            return response()->json(Respuestas::respuesta404('id de producto no enviado.'));
         }
 
         $producto->delete();
