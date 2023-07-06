@@ -74,6 +74,7 @@ Route::group([
     Route::put('actualizar-producto', [ProductoController::class, 'actualizarProducto']);
     Route::get('consultar-producto/{id}', [ProductoController::class, 'consultarProducto']);
     Route::get('consultar-productos', [ProductoController::class, 'consultarProductos']);
+    Route::get('consultar-productos-venta', [ProductoController::class, 'consultarProductosVenta']);
     Route::delete('eliminar-producto/{id}', [ProductoController::class, 'eliminarProducto']);
 });
 

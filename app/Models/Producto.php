@@ -19,6 +19,7 @@ class Producto extends Model
         'compradosTotales',
         'cantidadStock',
         'agotado',
-        'eliminado'
+        'eliminado',
+        'stockCompras',
     ];
 }

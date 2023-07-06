@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Producto;
+use App\Respuestas\Respuestas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Respuestas\Respuestas;
-use Illuminate\Support\Facades\DB;
 
 class ProductoController extends Controller
 {
@@ -30,6 +30,7 @@ class ProductoController extends Controller
             'categoria' => 'required',
             'cantidadStock' => 'required',
             'sku' => 'required',
+            'stockCompras' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -116,6 +117,18 @@ class ProductoController extends Controller
         Producto::where('id', $id)->update(['eliminado' => true]);
 
         $productos = Producto::where('eliminado', false)
+            ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
+            ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
+            ->orderBy('stock_compras.nombre', 'asc')
+            ->get();
+
+        return response()->json(Respuestas::respuesta200('Producto eliminado', $productos));
+    }
+
+    public function consultarProductosVenta()
+    {
+        $idCategoria = Categoria::where('categoria', 'Venta')->get()[0]->id;
+        $productos = Producto::where('stock_compras.categoria', $idCategoria)
             ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
             ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
             ->orderBy('stock_compras.nombre', 'asc')
