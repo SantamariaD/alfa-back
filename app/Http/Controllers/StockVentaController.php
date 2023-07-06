@@ -34,6 +34,7 @@ class StockVentaController extends Controller
             'precioVenta' => 'required',
             'idCategoria' => 'required',
             'sku' => 'required',
+            'stockCompras' => 'nullable',
         ]);
 
         if ($validator->fails()) {

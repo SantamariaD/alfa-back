@@ -21,5 +21,6 @@ class StockVenta extends Model
         'agotado',
         'precioVenta',
         'eliminado',
+        'stockCompras',
     ];
 }

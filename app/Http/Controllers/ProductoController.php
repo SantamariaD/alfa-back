@@ -129,6 +129,7 @@ class ProductoController extends Controller
     {
         $idCategoria = Categoria::where('categoria', 'Venta')->get()[0]->id;
         $productos = Producto::where('stock_compras.categoria', $idCategoria)
+            ->where('stock_compras.eliminado', false)
             ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
             ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
             ->orderBy('stock_compras.nombre', 'asc')
