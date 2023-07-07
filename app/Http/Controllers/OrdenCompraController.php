@@ -48,9 +48,9 @@ class OrdenCompraController extends Controller
             $join->on('catalogo_proveedores.idProveedor', '=', 'productos_orden_compra.idProveedor')
                 ->on('catalogo_proveedores.idProducto', '=', 'productos_orden_compra.idProducto');
         })
-            ->join('stock_compras', 'stock_compras.id', '=', 'productos_orden_compra.idProducto')
+            ->join('almacen_compras', 'almacen_compras.id', '=', 'productos_orden_compra.idProducto')
             ->join('orden_compra_info', 'orden_compra_info.id', '=', 'productos_orden_compra.idOrdenCompra')
-            ->select('productos_orden_compra.*', 'catalogo_proveedores.politicasVenta', 'stock_compras.sku', 'stock_compras.nombre AS nombreProducto')
+            ->select('productos_orden_compra.*', 'catalogo_proveedores.politicasVenta', 'almacen_compras.sku', 'almacen_compras.nombre AS nombreProducto')
             ->get();
 
         $ordenesCompraInfo = $ordenesCompraInfo->map(function ($ordenCompra) use ($catalogoProveedor) {

@@ -64,15 +64,15 @@ class CatalogoProveedorController extends Controller
     public function consultarCatalogoProveedor($id)
     {
         $catalogoProveedor = CatalogoProveedor::where('idProveedor', $id)
-            ->join('stock_compras', 'stock_compras.id', '=', 'catalogo_proveedores.idProducto')
+            ->join('almacen_compras', 'almacen_compras.id', '=', 'catalogo_proveedores.idProducto')
             ->join('proveedores', 'proveedores.id', '=', 'catalogo_proveedores.idProveedor')
             ->select(
                 'catalogo_proveedores.*',
-                'stock_compras.sku',
-                'stock_compras.nombre AS nombreProducto',
+                'almacen_compras.sku',
+                'almacen_compras.nombre AS nombreProducto',
                 'proveedores.nombre AS nombreProveedor'
             )
-            ->where('stock_compras.eliminado', false)
+            ->where('almacen_compras.eliminado', false)
             ->orderBy('nombreProducto', 'asc')
             ->get();
 

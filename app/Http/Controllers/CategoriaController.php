@@ -46,13 +46,13 @@ class CategoriaController extends Controller
         $categorias = Categoria::all();
         $productos = Producto::where('eliminado', false)
             ->join(
-                'categorias_stock_compras',
-                'stock_compras.categoria',
+                'categorias_almacen_compras',
+                'almacen_compras.categoria',
                 '=',
-                'categorias_stock_compras.id'
+                'categorias_almacen_compras.id'
             )
-            ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
-            ->orderBy('stock_compras.nombre', 'asc')
+            ->select('almacen_compras.*', 'categorias_almacen_compras.categoria', 'categorias_almacen_compras.id AS idCategoria')
+            ->orderBy('almacen_compras.nombre', 'asc')
             ->get();
 
         $respuesta = [

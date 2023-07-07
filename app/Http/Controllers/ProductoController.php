@@ -13,9 +13,9 @@ class ProductoController extends Controller
     public function consultarProductos()
     {
         $productos = Producto::where('eliminado', false)
-            ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
-            ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
-            ->orderBy('stock_compras.nombre', 'asc')
+            ->join('categorias_almacen_compras', 'almacen_compras.categoria', '=', 'categorias_almacen_compras.id')
+            ->select('almacen_compras.*', 'categorias_almacen_compras.categoria', 'categorias_almacen_compras.id AS idCategoria')
+            ->orderBy('almacen_compras.nombre', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Productos encontrados.', $productos));
@@ -39,9 +39,9 @@ class ProductoController extends Controller
 
         Producto::create($request->all());
         $producto = Producto::where('eliminado', false)
-            ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
-            ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
-            ->orderBy('stock_compras.nombre', 'asc')
+            ->join('categorias_almacen_compras', 'almacen_compras.categoria', '=', 'categorias_almacen_compras.id')
+            ->select('almacen_compras.*', 'categorias_almacen_compras.categoria', 'categorias_almacen_compras.id AS idCategoria')
+            ->orderBy('almacen_compras.nombre', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Producto creado.', $producto), 201);
@@ -100,9 +100,9 @@ class ProductoController extends Controller
             ->update($datosActualizado);
 
         $productos = Producto::where('eliminado', false)
-            ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
-            ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
-            ->orderBy('stock_compras.nombre', 'asc')
+            ->join('categorias_almacen_compras', 'almacen_compras.categoria', '=', 'categorias_almacen_compras.id')
+            ->select('almacen_compras.*', 'categorias_almacen_compras.categoria', 'categorias_almacen_compras.id AS idCategoria')
+            ->orderBy('almacen_compras.nombre', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Producto actualizado.', $productos));
@@ -117,9 +117,9 @@ class ProductoController extends Controller
         Producto::where('id', $id)->update(['eliminado' => true]);
 
         $productos = Producto::where('eliminado', false)
-            ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
-            ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
-            ->orderBy('stock_compras.nombre', 'asc')
+            ->join('categorias_almacen_compras', 'almacen_compras.categoria', '=', 'categorias_almacen_compras.id')
+            ->select('almacen_compras.*', 'categorias_almacen_compras.categoria', 'categorias_almacen_compras.id AS idCategoria')
+            ->orderBy('almacen_compras.nombre', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Producto eliminado', $productos));
@@ -128,11 +128,11 @@ class ProductoController extends Controller
     public function consultarProductosVenta()
     {
         $idCategoria = Categoria::where('categoria', 'Venta')->get()[0]->id;
-        $productos = Producto::where('stock_compras.categoria', $idCategoria)
-            ->where('stock_compras.eliminado', false)
-            ->join('categorias_stock_compras', 'stock_compras.categoria', '=', 'categorias_stock_compras.id')
-            ->select('stock_compras.*', 'categorias_stock_compras.categoria', 'categorias_stock_compras.id AS idCategoria')
-            ->orderBy('stock_compras.nombre', 'asc')
+        $productos = Producto::where('almacen_compras.categoria', $idCategoria)
+            ->where('almacen_compras.eliminado', false)
+            ->join('categorias_almacen_compras', 'almacen_compras.categoria', '=', 'categorias_almacen_compras.id')
+            ->select('almacen_compras.*', 'categorias_almacen_compras.categoria', 'categorias_almacen_compras.id AS idCategoria')
+            ->orderBy('almacen_compras.nombre', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Producto eliminado', $productos));
