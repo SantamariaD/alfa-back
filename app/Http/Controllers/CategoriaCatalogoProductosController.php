@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CategoriaVenta;
-use App\Models\StockVenta;
+use App\Models\CategoriaCatalogoProductos;
+use App\Models\CatalogoProductos;
 use App\Respuestas\Respuestas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CategoriaVentaController extends Controller
+class CategoriaCatalogoProductosController extends Controller
 {
     public function consultarCategoriasVentas()
     {
-        $categorias = CategoriaVenta::all();
+        $categorias = CategoriaCatalogoProductos::all();
         return response()->json(Respuestas::respuesta200('Categorías encontradas.', $categorias));
     }
 
-    public function crearCategoriaVentas(Request $request)
+    public function crearCategoriaCatalogoProductoss(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'categoria' => 'required',
@@ -26,34 +26,34 @@ class CategoriaVentaController extends Controller
             return response()->json(Respuestas::respuesta400($validator->errors()), 400);
         }
 
-        CategoriaVenta::create($request->all());
+        CategoriaCatalogoProductos::create($request->all());
 
-        $categorias = CategoriaVenta::all();
+        $categorias = CategoriaCatalogoProductos::all();
 
         return response()->json(Respuestas::respuesta200('Categoria creado.', $categorias), 201);
     }
 
-    public function eliminarCategoriaVentas($id)
+    public function eliminarCategoriaCatalogoProductoss($id)
     {
-        $categoria = CategoriaVenta::find($id);
+        $categoria = CategoriaCatalogoProductos::find($id);
 
-        StockVenta::where('idCategoria', $id)->update(['idCategoria' => 1]);
+        CatalogoProductos::where('idCategoria', $id)->update(['idCategoria' => 1]);
 
         if (!$categoria) {
             return response()->json(Respuestas::respuesta404('Producto no encontrado'), 404);
         }
 
         $categoria->delete();
-        $categorias = CategoriaVenta::all();
-        $productos = StockVenta::where('eliminado', false)
+        $categorias = CategoriaCatalogoProductos::all();
+        $productos = CatalogoProductos::where('eliminado', false)
             ->join(
-                'categorias_stock_ventas',
-                'stock_ventas.idCategoria',
+                'categorias_catalogo_productos',
+                'catalogo_productos.idCategoria',
                 '=',
-                'categorias_stock_ventas.id'
+                'categorias_catalogo_productos.id'
             )
-            ->select('stock_ventas.*', 'categorias_stock_ventas.categoria')
-            ->orderBy('stock_ventas.nombreProducto', 'asc')
+            ->select('catalogo_productos.*', 'categorias_catalogo_productos.categoria')
+            ->orderBy('catalogo_productos.nombreProducto', 'asc')
             ->get();
 
         $respuesta = [

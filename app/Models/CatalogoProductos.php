@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class StockVenta extends Model
+class CatalogoProductos extends Model
 {
     use HasFactory;
-    protected $table = 'stock_ventas';
+    protected $table = 'catalogo_productos';
 
     protected $fillable = [
         'nombreProducto',

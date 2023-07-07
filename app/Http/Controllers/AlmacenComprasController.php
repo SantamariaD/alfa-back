@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categoria;
-use App\Models\Producto;
+use App\Models\AlmacenCompras;
 use App\Respuestas\Respuestas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ProductoController extends Controller
+class AlmacenComprasController extends Controller
 {
     public function consultarProductos()
     {
-        $productos = Producto::where('eliminado', false)
+        $productos = AlmacenCompras::where('eliminado', false)
             ->join('categorias_almacen_compras', 'almacen_compras.categoria', '=', 'categorias_almacen_compras.id')
             ->select('almacen_compras.*', 'categorias_almacen_compras.categoria', 'categorias_almacen_compras.id AS idCategoria')
             ->orderBy('almacen_compras.nombre', 'asc')
@@ -37,8 +37,8 @@ class ProductoController extends Controller
             return response()->json(Respuestas::respuesta400($validator->errors()), 400);
         }
 
-        Producto::create($request->all());
-        $producto = Producto::where('eliminado', false)
+        AlmacenCompras::create($request->all());
+        $producto = AlmacenCompras::where('eliminado', false)
             ->join('categorias_almacen_compras', 'almacen_compras.categoria', '=', 'categorias_almacen_compras.id')
             ->select('almacen_compras.*', 'categorias_almacen_compras.categoria', 'categorias_almacen_compras.id AS idCategoria')
             ->orderBy('almacen_compras.nombre', 'asc')
@@ -49,7 +49,7 @@ class ProductoController extends Controller
 
     public function consultarProducto($id)
     {
-        $producto = Producto::find($id);
+        $producto = AlmacenCompras::find($id);
 
         if (!$producto) {
             return response()->json(Respuestas::respuesta404('Producto no encontrado'));
@@ -96,10 +96,10 @@ class ProductoController extends Controller
             $datosActualizado['agotado'] = 0;
         }
 
-        Producto::where('id', $request->input('id'))
+        AlmacenCompras::where('id', $request->input('id'))
             ->update($datosActualizado);
 
-        $productos = Producto::where('eliminado', false)
+        $productos = AlmacenCompras::where('eliminado', false)
             ->join('categorias_almacen_compras', 'almacen_compras.categoria', '=', 'categorias_almacen_compras.id')
             ->select('almacen_compras.*', 'categorias_almacen_compras.categoria', 'categorias_almacen_compras.id AS idCategoria')
             ->orderBy('almacen_compras.nombre', 'asc')
@@ -114,9 +114,9 @@ class ProductoController extends Controller
             return response()->json(Respuestas::respuesta404('id de producto no enviado.'));
         }
 
-        Producto::where('id', $id)->update(['eliminado' => true]);
+        AlmacenCompras::where('id', $id)->update(['eliminado' => true]);
 
-        $productos = Producto::where('eliminado', false)
+        $productos = AlmacenCompras::where('eliminado', false)
             ->join('categorias_almacen_compras', 'almacen_compras.categoria', '=', 'categorias_almacen_compras.id')
             ->select('almacen_compras.*', 'categorias_almacen_compras.categoria', 'categorias_almacen_compras.id AS idCategoria')
             ->orderBy('almacen_compras.nombre', 'asc')
@@ -128,7 +128,7 @@ class ProductoController extends Controller
     public function consultarProductosVenta()
     {
         $idCategoria = Categoria::where('categoria', 'Venta')->get()[0]->id;
-        $productos = Producto::where('almacen_compras.categoria', $idCategoria)
+        $productos = AlmacenCompras::where('almacen_compras.categoria', $idCategoria)
             ->where('almacen_compras.eliminado', false)
             ->join('categorias_almacen_compras', 'almacen_compras.categoria', '=', 'categorias_almacen_compras.id')
             ->select('almacen_compras.*', 'categorias_almacen_compras.categoria', 'categorias_almacen_compras.id AS idCategoria')

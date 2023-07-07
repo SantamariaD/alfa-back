@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\StockVenta;
+use App\Models\CatalogoProductos;
 use App\Respuestas\Respuestas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class StockVentaController extends Controller
+class CatalogoProductosController extends Controller
 {
     public function consultarProductosVentas()
     {
-        $productos = StockVenta::where('eliminado', false)
+        $productos = CatalogoProductos::where('eliminado', false)
             ->join(
-                'categorias_stock_ventas',
-                'stock_ventas.idCategoria',
+                'categorias_catalogo_productos',
+                'catalogo_productos.idCategoria',
                 '=',
-                'categorias_stock_ventas.id'
+                'categorias_catalogo_productos.id'
             )
-            ->select('stock_ventas.*', 'categorias_stock_ventas.categoria')
-            ->orderBy('stock_ventas.nombreProducto', 'asc')
+            ->select('catalogo_productos.*', 'categorias_catalogo_productos.categoria')
+            ->orderBy('catalogo_productos.nombreProducto', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Productos encontrados.', $productos));
@@ -41,16 +41,16 @@ class StockVentaController extends Controller
             return response()->json(Respuestas::respuesta400($validator->errors()), 400);
         }
 
-        StockVenta::create($request->all());
-        $producto = StockVenta::where('eliminado', false)
+        CatalogoProductos::create($request->all());
+        $producto = CatalogoProductos::where('eliminado', false)
             ->join(
-                'categorias_stock_ventas',
-                'stock_ventas.idCategoria',
+                'categorias_catalogo_productos',
+                'catalogo_productos.idCategoria',
                 '=',
-                'categorias_stock_ventas.id'
+                'categorias_catalogo_productos.id'
             )
-            ->select('stock_ventas.*', 'categorias_stock_ventas.categoria')
-            ->orderBy('stock_ventas.nombreProducto', 'asc')
+            ->select('catalogo_productos.*', 'categorias_catalogo_productos.categoria')
+            ->orderBy('catalogo_productos.nombreProducto', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Producto creado.', $producto), 201);
@@ -94,18 +94,18 @@ class StockVentaController extends Controller
             $datosActualizado['agotado'] = 0;
         }
 
-        StockVenta::where('id', $request->input('id'))
+        CatalogoProductos::where('id', $request->input('id'))
             ->update($datosActualizado);
 
-        $productos = StockVenta::where('eliminado', false)
+        $productos = CatalogoProductos::where('eliminado', false)
             ->join(
-                'categorias_stock_ventas',
-                'stock_ventas.idCategoria',
+                'categorias_catalogo_productos',
+                'catalogo_productos.idCategoria',
                 '=',
-                'categorias_stock_ventas.id'
+                'categorias_catalogo_productos.id'
             )
-            ->select('stock_ventas.*', 'categorias_stock_ventas.categoria')
-            ->orderBy('stock_ventas.nombreProducto', 'asc')
+            ->select('catalogo_productos.*', 'categorias_catalogo_productos.categoria')
+            ->orderBy('catalogo_productos.nombreProducto', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Producto actualizado.', $productos));
@@ -117,17 +117,17 @@ class StockVentaController extends Controller
             return response()->json(Respuestas::respuesta404('id de producto no enviado.'));
         }
 
-        StockVenta::where('id', $id)->update(['eliminado' => true]);
+        CatalogoProductos::where('id', $id)->update(['eliminado' => true]);
 
-        $productos = StockVenta::where('eliminado', false)
+        $productos = CatalogoProductos::where('eliminado', false)
             ->join(
-                'categorias_stock_ventas',
-                'stock_ventas.idCategoria',
+                'categorias_catalogo_productos',
+                'catalogo_productos.idCategoria',
                 '=',
-                'categorias_stock_ventas.id'
+                'categorias_catalogo_productos.id'
             )
-            ->select('stock_ventas.*', 'categorias_stock_ventas.categoria')
-            ->orderBy('stock_ventas.nombreProducto', 'asc')
+            ->select('catalogo_productos.*', 'categorias_catalogo_productos.categoria')
+            ->orderBy('catalogo_productos.nombreProducto', 'asc')
             ->get();
 
         return response()->json(Respuestas::respuesta200('Producto eliminado', $productos));

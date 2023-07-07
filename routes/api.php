@@ -5,9 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DocumentosController;
 use App\Http\Controllers\PerfilController;
-use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\AlmacenComprasController;
 use App\Http\Controllers\CategoriaController;
-use App\Http\Controllers\CategoriaVentaController;
+use App\Http\Controllers\CategoriaCatalogoProductosController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\CatalogoProveedorController;
@@ -16,7 +16,7 @@ use App\Http\Controllers\OrdenCompraController;
 use App\Http\Controllers\ProductoOrdenCompraController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\SucursalesController;
-use App\Http\Controllers\StockVentaController;
+use App\Http\Controllers\CatalogoProductosController;
 
 
 /*
@@ -70,12 +70,12 @@ Route::group([
 Route::group([
     'prefix' => 'producto'
 ], function ($router) {
-    Route::post('guardar-producto', [ProductoController::class, 'crearProducto']);
-    Route::put('actualizar-producto', [ProductoController::class, 'actualizarProducto']);
-    Route::get('consultar-producto/{id}', [ProductoController::class, 'consultarProducto']);
-    Route::get('consultar-productos', [ProductoController::class, 'consultarProductos']);
-    Route::get('consultar-productos-venta', [ProductoController::class, 'consultarProductosVenta']);
-    Route::delete('eliminar-producto/{id}', [ProductoController::class, 'eliminarProducto']);
+    Route::post('guardar-producto', [AlmacenComprasController::class, 'crearProducto']);
+    Route::put('actualizar-producto', [AlmacenComprasController::class, 'actualizarProducto']);
+    Route::get('consultar-producto/{id}', [AlmacenComprasController::class, 'consultarProducto']);
+    Route::get('consultar-productos', [AlmacenComprasController::class, 'consultarProductos']);
+    Route::get('consultar-productos-venta', [AlmacenComprasController::class, 'consultarProductosVenta']);
+    Route::delete('eliminar-producto/{id}', [AlmacenComprasController::class, 'eliminarProducto']);
 });
 
 Route::group([
@@ -89,9 +89,9 @@ Route::group([
 Route::group([
     'prefix' => 'categorias-ventas'
 ], function ($router) {
-    Route::get('consultar-categorias', [CategoriaVentaController::class, 'consultarCategoriasVentas']);
-    Route::post('guardar-categoria', [CategoriaVentaController::class, 'crearCategoriaVentas']);
-    Route::delete('eliminar-categoria/{id}', [CategoriaVentaController::class, 'eliminarCategoriaVentas']);
+    Route::get('consultar-categorias', [CategoriaCatalogoProductosController::class, 'consultarCategoriasVentas']);
+    Route::post('guardar-categoria', [CategoriaCatalogoProductosController::class, 'crearCategoriaCatalogoProductoss']);
+    Route::delete('eliminar-categoria/{id}', [CategoriaCatalogoProductosController::class, 'eliminarCategoriaCatalogoProductoss']);
 });
 
 Route::group([
@@ -171,10 +171,10 @@ Route::group([
 Route::group([
     'prefix' => 'stock-ventas'
 ], function ($router) {
-    Route::get('consultar-productos', [StockVentaController::class, 'consultarProductosVentas']);
-    Route::post('guardar-producto', [StockVentaController::class, 'crearProductoVentas']);
-    Route::put('actualizar-producto', [StockVentaController::class, 'actualizarProductoVentas']);
-    Route::delete('eliminar-producto/{id}', [StockVentaController::class, 'eliminarProductoVentas']);
+    Route::get('consultar-productos', [CatalogoProductosController::class, 'consultarProductosVentas']);
+    Route::post('guardar-producto', [CatalogoProductosController::class, 'crearProductoVentas']);
+    Route::put('actualizar-producto', [CatalogoProductosController::class, 'actualizarProductoVentas']);
+    Route::delete('eliminar-producto/{id}', [CatalogoProductosController::class, 'eliminarProductoVentas']);
 });
 
 
