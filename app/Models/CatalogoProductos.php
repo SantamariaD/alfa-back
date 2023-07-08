@@ -20,6 +20,7 @@ class CatalogoProductos extends Model
         'cantidadStock',
         'agotado',
         'precioVenta',
+        'precioCompra',
         'eliminado',
         'stockCompras',
     ];

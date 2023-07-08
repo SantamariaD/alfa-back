@@ -35,6 +35,7 @@ class CatalogoProductosController extends Controller
             'idCategoria' => 'required',
             'sku' => 'required',
             'stockCompras' => 'nullable',
+            'precioCompras' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -65,6 +66,8 @@ class CatalogoProductosController extends Controller
             'codigoBarras' => 'nullable',
             'idCategoria' => 'nullable',
             'precioVenta' => 'nullable',
+            'precioCompra' => 'nullable',
+            'descuento' => 'nullable',
             'cantidadStock' => 'nullable',
             'ventas' => 'nullable',
             'agotado' => 'nullable',
@@ -83,6 +86,8 @@ class CatalogoProductosController extends Controller
             'codigoBarras' => $request->codigoBarras,
             'cantidadStock' => $request->cantidadStock,
             'precioVenta' => $request->precioVenta,
+            'precioCompra' => $request->precioCompra,
+            'descuento' => $request->descuento,
             'ventasTotales' => $request->ventas,
             'sku' => $request->sku,
             'agotado' => $request->agotado,
