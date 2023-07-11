@@ -33,7 +33,7 @@ class CatalogoProductosController extends Controller
             'codigoBarras' => 'required',
             'precioVenta' => 'required',
             'idCategoria' => 'required',
-            'sku' => 'required',
+            'sku' => 'nullable',    
             'stockCompras' => 'nullable',
             'precioCompras' => 'nullable',
         ]);
